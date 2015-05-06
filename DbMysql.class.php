@@ -1,49 +1,49 @@
 <?php
 /**
- * MysqlÊı¾İ¿â²Ù×÷Àà v2.0
- * 2009.1.22 by Aboc QQ:9986584
- * Ôö¼ÓÎÄ¼ş»º´æ
+ * Mysqlæ•°æ®åº“æ“ä½œç±» v2.0
+ * 2015.5.6 by Aboc QQ:9986584
+ * å¢åŠ æ–‡ä»¶ç¼“å­˜
  *
  */
 class DbMysql {
 	/**
-	 * ÔÚÊı¾İ¿â²Ù×÷ÖĞ,Ö»¶ÔÊı¾İ¿â²Ù×÷ÓĞÓ°ÏìµÄ×Ö·û×ö×ªÒå
-	 * µ±´ËÀàÕı³£ºó,ËùÓĞÊı¾İ²Ù×÷ @
+	 * åœ¨æ•°æ®åº“æ“ä½œä¸­,åªå¯¹æ•°æ®åº“æ“ä½œæœ‰å½±å“çš„å­—ç¬¦åšè½¬ä¹‰
+	 * å½“æ­¤ç±»æ­£å¸¸å,æ‰€æœ‰æ•°æ®æ“ä½œ @
 	 */
 
 	/*
-	 * Êı¾İ¿âÁ¬½Ó¾ä±ú
+	 * æ•°æ®åº“è¿æ¥å¥æŸ„
 	 */
 	private $_Db = NULL;
 
 	/*
-	 * ÊÇ·ñ³ÖĞøÁ¬½Ó 0.1
+	 * æ˜¯å¦æŒç»­è¿æ¥ 0.1
 	 */
 	private $_pconnect = 0;
 
 	/*
-	 * ±àÂë
+	 * ç¼–ç 
 	 */
 	private $_charset = 'gbk';
 	
 	
 	/*
-	 *×îºóÒ»´Î²åÈëµÄID
+	 *æœ€åä¸€æ¬¡æ’å…¥çš„ID
 	 */
 	 private $_lastId = 0;
 
 	/*
-	 * Ä¬ÈÏÊı¾İ¿âÅäÖÃ
+	 * é»˜è®¤æ•°æ®åº“é…ç½®
 	 */
 	private $_config = array ('dbhost' => 'localhost', 'dbuser' => 'root', 'dbpass' => 'root', 'dbname' => 'test');
 	
 	/**
-	 * »º´æÂ·¾¶
+	 * ç¼“å­˜è·¯å¾„
 	 */
 	private $_cachePath = '';
 	
 	/**
-	 * sqlÓï¾ä
+	 * sqlè¯­å¥
 	 *
 	 * @var unknown_type
 	 */
@@ -51,24 +51,24 @@ class DbMysql {
         
         /**
          *
-         * @var type ±¸·İÓÃ
+         * @var type å¤‡ä»½ç”¨
          */
         private $_backupsql = '';
 
 	/**
-	 * ³õÊ¼Á¬½ÓÊı¾İ¿â
+	 * åˆå§‹è¿æ¥æ•°æ®åº“
 	 */
 	function __construct($config,$pconnect=0,$cachepath='cache') {
 		if (empty($config)) $config = array();
 		$this->checkConfig ( $config );
 		$this->_pconnect = $pconnect;
 		$this->connect ();
-		$this->query ( 'set names ' . $this->_charset ); //ÉèÖÃ±àÂë
+		$this->query ( 'set names ' . $this->_charset ); //è®¾ç½®ç¼–ç 
 		$this->_cachePath = $cachepath;
 	}
 
 	/**
-	 * ÅĞ¶Ïconfig±äÁ¿
+	 * åˆ¤æ–­configå˜é‡
 	 *
 	 * @param unknown_type $config
 	 */
@@ -80,22 +80,22 @@ class DbMysql {
 	}
 
 	/*
-	 * Á¬½ÓÊı¾İ¿â
+	 * è¿æ¥æ•°æ®åº“
 	 */
 	private function connect() {
 //		print_r($this->_config);
 		if ($this->_pconnect) {
-			$this->_Db = mysql_pconnect ( $this->_config ['dbhost'], $this->_config ['dbuser'], $this->_config ['dbpass'] ) or die ( 'Êı¾İ¿âÁ¬½ÓÊ§°Ü' . mysql_errno () );
+			$this->_Db = mysql_pconnect ( $this->_config ['dbhost'], $this->_config ['dbuser'], $this->_config ['dbpass'] ) or die ( 'æ•°æ®åº“è¿æ¥å¤±è´¥' . mysql_errno () );
 		} else {
-			$this->_Db = mysql_connect ( $this->_config ['dbhost'], $this->_config ['dbuser'], $this->_config ['dbpass'] ) or die ( 'Êı¾İ¿âÁ¬½ÓÊ§°Ü' . mysql_errno () );
+			$this->_Db = mysql_connect ( $this->_config ['dbhost'], $this->_config ['dbuser'], $this->_config ['dbpass'] ) or die ( 'æ•°æ®åº“è¿æ¥å¤±è´¥' . mysql_errno () );
 		}
 		if ($this->_Db != NULL) {
-			mysql_select_db ( $this->_config ['dbname'], $this->_Db ) or die ( 'Êı¾İ¿â' . $this->_config ['dbname'] . '²»´æÔÚ' );
+			mysql_select_db ( $this->_config ['dbname'], $this->_Db ) or die ( 'æ•°æ®åº“' . $this->_config ['dbname'] . 'ä¸å­˜åœ¨' );
 		}
 	}
 
 	/**
-	 * ½«±äÁ¿µÄµ¥ÒıºÅ»òË«ÒıºÅ×ªÒå
+	 * å°†å˜é‡çš„å•å¼•å·æˆ–åŒå¼•å·è½¬ä¹‰
 	 *
 	 * @param unknown_type $string
 	 */
@@ -105,8 +105,8 @@ class DbMysql {
 					$stringnew [$this->strtag ( $key )] = $this->strtag ( $value );
 				}
 			} else {
-				//ÔÚ´Ë×ö×ªÒå,¶Ôµ¥ÒıºÅ
-				//TODO ºÃÏñ %Ò²Òª×ªÒå°É?
+				//åœ¨æ­¤åšè½¬ä¹‰,å¯¹å•å¼•å·
+				//TODO å¥½åƒ %ä¹Ÿè¦è½¬ä¹‰å§?
 				//$string = iconv("gbk","gbk",$string);
 				$stringnew = mysql_real_escape_string ( $string1 );
 //				$stringnew = get_magic_quotes_gpc()?$string:addslashes ( $string1 );
@@ -116,14 +116,14 @@ class DbMysql {
 	}
 
 	/**
-	 * ½«Êı×é×ª»¯ÎªSQL½ÓÊÜµÄÌõ¼şÑùÊ½
+	 * å°†æ•°ç»„è½¬åŒ–ä¸ºSQLæ¥å—çš„æ¡ä»¶æ ·å¼
 	 *
 	 * @param unknown_type $array
 	 */
 	private function chageArray($array) {
-		//MYSQLÖ§³Öinsert into joincart set session_id = 'dddd',product_id='44',number='7',jointime='456465'
-		//ËùÒÔ¸üĞÂºÍ²åÈë¿ÉÒÔÊ¹ÓÃÍ¬Ò»×éÊı¾İ
-		$array = $this->strtag ( $array ); //×ªÒå
+		//MYSQLæ”¯æŒinsert into joincart set session_id = 'dddd',product_id='44',number='7',jointime='456465'
+		//æ‰€ä»¥æ›´æ–°å’Œæ’å…¥å¯ä»¥ä½¿ç”¨åŒä¸€ç»„æ•°æ®
+		$array = $this->strtag ( $array ); //è½¬ä¹‰
 		$str = '';
 		foreach ( $array as $key => $value ) {
 			$str .= empty ( $str ) ? "`" . $key . "`='" . $value."'" : ", `" . $key . "`='" . $value."'";
@@ -132,7 +132,7 @@ class DbMysql {
 	}
 
 	/**
-	 * Ö´ĞĞ²éÑ¯Óï¾ä
+	 * æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 	 * @return bool
 	 */
 	public function query($sql) {
@@ -142,21 +142,21 @@ class DbMysql {
 			if(UC_DBUSER == 'root'){
 			    echo $sql.'<br>'.mysql_error().'<br>';
 			    //$this->createErrorLog($sql);
-			    die ( 'Êı¾İ¿â³ö´í' );
+			    die ( 'æ•°æ®åº“å‡ºé”™' );
 			} else {
-				 $subject = date("Y-m-d H:i:s")."Êı¾İ¿â²éÑ¯³ö´í";
+				 $subject = date("Y-m-d H:i:s")."æ•°æ®åº“æŸ¥è¯¢å‡ºé”™";
 				 $thisurl = str::getThisUrl();
 				 $error = mysql_error();
     			 $content = <<<EOT
-Êı¾İ¿â²éÑ¯³ö´í,ÏêÏ¸ÈçÏÂ:<br />
+æ•°æ®åº“æŸ¥è¯¢å‡ºé”™,è¯¦ç»†å¦‚ä¸‹:<br />
 $thisurl <br />
 $error <br />
 $sql
 EOT;
-                 $username = '·ç×Ó';
+                 $username = 'é£å­';
                  if (function_exists('sendMail')){
                  	sendMail('9986584@qq.com',$username,$subject,$content);
-                    die(':(&nbsp;Êı¾İ¿â²éÑ¯³ö´í,ÒÑ¾­Í¨Öª¹ÜÀíÔ±,ÇëÉÔºóÖØÊÔ');
+                    die(':(&nbsp;æ•°æ®åº“æŸ¥è¯¢å‡ºé”™,å·²ç»é€šçŸ¥ç®¡ç†å‘˜,è¯·ç¨åé‡è¯•');
                  }
 			}
 		} else {
@@ -166,12 +166,12 @@ EOT;
 
 
 	/**
-	 * ²åÈë¼ÇÂ¼
+	 * æ’å…¥è®°å½•
 	 *
 	 */
 	public function insert($table, $array) {
 		if(!is_array($array))return false;
-		$array = $this->strtag ( $array ); //×ªÒå
+		$array = $this->strtag ( $array ); //è½¬ä¹‰
 		$str = '';
 		$val = '';
 		foreach ($array as $key=>$value){
@@ -189,13 +189,13 @@ EOT;
 	
 	
 	/**
-	 * Ìæ»»²¢²åÈë
+	 * æ›¿æ¢å¹¶æ’å…¥
 	 * @param unknown_type $table
 	 * @param unknown_type $array
 	 */
 	public function replaceInsert($table, $array) {
 		if(!is_array($array))return false;
-		$array = $this->strtag ( $array ); //×ªÒå
+		$array = $this->strtag ( $array ); //è½¬ä¹‰
 		$str = '';
 		$val = '';
 		foreach ($array as $key=>$value){
@@ -212,10 +212,10 @@ EOT;
 	}
 	
 	/**
-	 * ÅúÁ¿²åÈë¼ÇÂ¼
+	 * æ‰¹é‡æ’å…¥è®°å½•
 	 *
-	 * @param $table ±íÃû  
-	 * @param $batchArray ÅúÁ¿Êı¾İ ,¶şÎ¬Êı×é,½¡Ãû±ØĞèÏàÍ¬,·ñÔò²»ÄÜ²åÈë
+	 * @param $table è¡¨å  
+	 * @param $batchArray æ‰¹é‡æ•°æ® ,äºŒç»´æ•°ç»„,å¥åå¿…éœ€ç›¸åŒ,å¦åˆ™ä¸èƒ½æ’å…¥
 	 */
 	public function insertBatch($table,$batchArray){
 		if(!is_array($batchArray))return false;
@@ -243,7 +243,7 @@ EOT;
 	}
 
 	/**
-	 * ¸üĞÂ¼ÇÂ¼
+	 * æ›´æ–°è®°å½•
 	 *
 	 */
 	public function update($table, $array, $where = NULL) {
@@ -260,7 +260,7 @@ EOT;
 	}
 
 	/**
-	 * É¾³ı¼ÇÂ¼
+	 * åˆ é™¤è®°å½•
 	 *
 	 */
 	public function delete($table, $where = NULL) {
@@ -277,7 +277,7 @@ EOT;
 	}
 
 	/**
-	 * »ñÈ¡Ò»Ìõ¼ÇÂ¼
+	 * è·å–ä¸€æ¡è®°å½•
 	 *
 	 */
 	public function fetchRow($sql,$cacheTime=0,$cacheId='') {
@@ -297,7 +297,7 @@ EOT;
 	}
 
 	/**
-	 * »ñÈ¡ËùÓĞ¼ÇÂ¼/ÓÃµÄmysql_fetch_assocÑ­»·
+	 * è·å–æ‰€æœ‰è®°å½•/ç”¨çš„mysql_fetch_assocå¾ªç¯
 	 *
 	 */
 	public function fetchAll($sql,$cacheTime=0,$cacheId='') {
@@ -324,7 +324,7 @@ EOT;
 	}
 	
 	/**
-	 * »ñÈ¡×îºóÒ»´ÎÓ°ÏìµÄId
+	 * è·å–æœ€åä¸€æ¬¡å½±å“çš„Id
 	 *
 	 */
 	public function lastId() {
@@ -333,7 +333,7 @@ EOT;
 	}
 
 	/**
-	 * »ñÈ¡·ûºÏÌõ¼şµÄ¼ÇÂ¼Êı
+	 * è·å–ç¬¦åˆæ¡ä»¶çš„è®°å½•æ•°
 	 *
 	 */
 	public function fetchNum($sql) {
@@ -343,7 +343,7 @@ EOT;
 	}
 
 	/**
-	 * Êä³öÊÊºÏµÄwhereÓï¾ä
+	 * è¾“å‡ºé€‚åˆçš„whereè¯­å¥
 	 */
 	public function quoteInto($string,$value ) {
 		$value = $this->strtag($value);
@@ -356,7 +356,7 @@ EOT;
 	}
 	
 	/**
-	 * Êı¾İÊı¾İ¿âËùÓÃ´óĞ¡
+	 * æ•°æ®æ•°æ®åº“æ‰€ç”¨å¤§å°
 	 *
 	 * @param unknown_type $dbname
 	 * @return unknown
@@ -373,10 +373,10 @@ EOT;
     }
 	
 	/**
-	 * ÅĞ¶Ï»º´æÎÄ¼şÊÇ·ñÓĞĞ§,Èç¹ûÓĞĞ§£¬Ôò·µ»Ø»º´æÄÚÈİ
+	 * åˆ¤æ–­ç¼“å­˜æ–‡ä»¶æ˜¯å¦æœ‰æ•ˆ,å¦‚æœæœ‰æ•ˆï¼Œåˆ™è¿”å›ç¼“å­˜å†…å®¹
 	 */
 	private function checkCache($sql,$cacheTime = 0,$cacheId=''){
-		//²»»º´æ£¬Ö±½Ó·µ»Ø
+		//ä¸ç¼“å­˜ï¼Œç›´æ¥è¿”å›
 		return false;
 		if($cacheTime == 0){
 			return false;
@@ -393,7 +393,7 @@ EOT;
 	}
 	
 	/**
-	 * Éú³É»º´æ
+	 * ç”Ÿæˆç¼“å­˜
 	 */
 	private function createCache($sql,$data,$cacheId=''){
 		return;
@@ -403,7 +403,7 @@ EOT;
 	}
 	
 	/**
-	 * ¸ù¾İsqlÓï¾äÉú³ÉÎÄ¼şÃû¼°Â·¾¶
+	 * æ ¹æ®sqlè¯­å¥ç”Ÿæˆæ–‡ä»¶ååŠè·¯å¾„
 	 */
 	private function createFilename($sql,$cacheId=''){
 		if(!empty($cacheId))$sql = $cacheId;
@@ -421,9 +421,9 @@ EOT;
 	}
 	
 	/**
-	 * Çå³ı»º´æ
+	 * æ¸…é™¤ç¼“å­˜
 	 * 
-	 * Ìõ¼şÎª¿ÕÔòÇå³ıËùÓĞ»º´æ
+	 * æ¡ä»¶ä¸ºç©ºåˆ™æ¸…é™¤æ‰€æœ‰ç¼“å­˜
 	 * 
 	 * @return DbMysql
 	 */
@@ -436,7 +436,7 @@ EOT;
 				if(file_exists($path1) && filemtime($path1)<$times)@unlink($path1);
 			}			
 		}
-		//Çå³ıËùÓĞ»º´æ
+		//æ¸…é™¤æ‰€æœ‰ç¼“å­˜
 		else{
 			$this->clearFile($this->_cachePath,$times);
 		}
@@ -444,7 +444,7 @@ EOT;
 	}
 
 	/**
-	 * ±éÀúÉ¾³ıÎÄ¼ş¼°Ä¿Â¼
+	 * éå†åˆ é™¤æ–‡ä»¶åŠç›®å½•
 	 */
 	private function clearFile($cachePath,$times){
 		$list = scandir($cachePath);
@@ -461,7 +461,7 @@ EOT;
 	}
 
 	/**
-	 * Ğ´´íÎóÈÕÖ¾
+	 * å†™é”™è¯¯æ—¥å¿—
 	 *
 	 * @param unknown_type $log
 	 */
@@ -475,16 +475,16 @@ EOT;
 		$log = implode(' - ',$log)."\r\n";
 		$filename = $this->_cachePath.'error/'.date("Y-m").'.txt';
 		if(!$fp = fopen($filename,'a+')){
-			echo '´íÎóÈÕÖ¾´ò¿ªÊ§°Ü,ÇëÁªÂçQQ:9986584';
+			echo 'é”™è¯¯æ—¥å¿—æ‰“å¼€å¤±è´¥,è¯·è”ç»œQQ:9986584';
 		}
 		if( fwrite($fp,$log) === FALSE ){
-			echo '´íÎóÈÕÖ¾Ğ´ÈëÊ§°Ü,ÇëÁªÂçQQ:9986584';
+			echo 'é”™è¯¯æ—¥å¿—å†™å…¥å¤±è´¥,è¯·è”ç»œQQ:9986584';
 		}
 		fclose($fp);		
 	}
 	
 	/**
-	 * »ñÈ¡×îºóÒ»´ÎÖ´ĞĞµÄsqlÓï¾ä
+	 * è·å–æœ€åä¸€æ¬¡æ‰§è¡Œçš„sqlè¯­å¥
 	 *
 	 */
 	public function getLastSql(){
@@ -492,7 +492,7 @@ EOT;
 	}
         
     /**
-     * »ñÈ¡Êı¾İ¿âÖĞËùÓĞµÄ±í
+     * è·å–æ•°æ®åº“ä¸­æ‰€æœ‰çš„è¡¨
      * @param type $dbname
      * @return type 
      */
@@ -511,17 +511,17 @@ EOT;
     }
 
     /**
-     * »ñÈ¡×îºóÒ»´ÎÓ°ÏìµÄ¼ÇÂ¼Êı
+     * è·å–æœ€åä¸€æ¬¡å½±å“çš„è®°å½•æ•°
      * @return type 
      */
     function fetchChangeRow() {
         return mysql_affected_rows();
     }
 	
-            //ÒÔÏÂÎªÊı¾İ¿â±¸·İ¹¦ÄÜ
+            //ä»¥ä¸‹ä¸ºæ•°æ®åº“å¤‡ä»½åŠŸèƒ½
     
     /**
-     * ±¸·İÊı¾İ¿â
+     * å¤‡ä»½æ•°æ®åº“
      * @param type $tableName
      * @param type $localhost
      * @param type $path
@@ -551,7 +551,7 @@ EOT;
             if(isset ($create['Create Table'])){
                 $this->_backupsql .= "DROP TABLE IF EXISTS `$table`;";
                 $this->_backupsql .= $create['Create Table'].";\n\r";
-                //ÒÔÏÂÊÇµ¼³öÊı¾İ
+                //ä»¥ä¸‹æ˜¯å¯¼å‡ºæ•°æ®
                 $rows = $this->fetchAll("select * from ".$create['Table']);
                 foreach ($rows as $row) {
                     $this->_backupsql .= "insert into `$table` values(";
@@ -565,7 +565,7 @@ EOT;
         }
         $this->_backupsql = iconv('gbk', 'utf-8', $this->_backupsql);
         if($localhost){
-            //±¾µØ
+            //æœ¬åœ°
             $fileName = time().rand(111111,999999).$fileName;
             if(file_put_contents($fileName, $this->_backupsql))
                     return 1;
@@ -588,7 +588,7 @@ EOT;
     
 
 	/**
-	 * ÊÍ·Å²éÑ¯½á¹û
+	 * é‡Šæ”¾æŸ¥è¯¢ç»“æœ
 	 */
 	private function free() {
 		mysql_free_result($this->_Db);
