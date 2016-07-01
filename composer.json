@@ -3,5 +3,11 @@
   "description": "MySQL 操作类",
   "require": {
     "php": "^5.0.0"
-  }
+  },
+  "authors": [
+    {
+      "name": "aboc",
+      "email": "mayinhua@gmail.com"
+    }
+  ]
 }

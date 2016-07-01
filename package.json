@@ -1,0 +1,19 @@
+{
+  "name": "DbMySQL",
+  "description": "PHP MySQL操作类",
+  "version": "1.0.1",
+  "homepage": "http://www.phpec.org",
+  "author": {
+    "name": "aboc",
+    "url": "https://github.com/abocd/DbMySQL"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abocd/DbMySQL.git"
+  },
+  "keywords": [
+    "php",
+    "mysql"
+  ]
+}
+
