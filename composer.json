@@ -1,0 +1,7 @@
+{
+  "name": "aboc/DbMySQL",
+  "description": "MySQL 操作类",
+  "require": {
+    "php": "^5.3.3"
+  }
+}
