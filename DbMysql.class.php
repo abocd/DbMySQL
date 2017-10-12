@@ -144,7 +144,7 @@ class DbMysql {
 				$thisurl = str::getThisUrl();
 				$error = mysqli_error($this->_Db);
 				$msg = "$date $thisurl $error $this->_sql\r\n";
-				log_write($msg,"mysql.log");
+				//log_write($msg,"mysql.log");
 				die("系统出现一个错误");
 			}
 		} else {
